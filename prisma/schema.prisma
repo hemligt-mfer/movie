@@ -78,7 +78,12 @@ enum Status {
     COMPLETED
 }
 
-model CustomerInfo {
+enum Role {
+    USER
+    ADMIN
+}
+
+model UserInfo {
     id           String    @id @default(ulid())
     userId       String?
     user         User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -87,22 +92,23 @@ model CustomerInfo {
     credit_card  String    @map("creditCard")
     birthdate    DateTime?
     updated_at   DateTime  @default(now()) @map("updatedAt")
+    role         Role      @default(USER)
 
-    @@map("customer_info")
+    @@map("user_info")
 }
 
 model User {
-    id            String         @id
+    id            String     @id
     name          String
     email         String
-    emailVerified Boolean        @default(false)
+    emailVerified Boolean    @default(false)
     image         String?
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
     sessions      Session[]
     accounts      Account[]
     order         Order[]
-    customerInfos CustomerInfo[]
+    customerInfos UserInfo[]
 
     @@unique([email])
     @@map("user")
