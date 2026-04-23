@@ -4,10 +4,154 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
+}
+
+model Movie {
+    id           String     @id @default(ulid())
+    title        String
+    description  String
+    price        Int
+    release_date DateTime   @default(now()) @map("releaseDate")
+    actor        Actor[]
+    director     Director[]
+    genre        Genre[]
+    updated_at   DateTime   @default(now())
+    active       Boolean
+    runtime      Int
+    language     String?
+    image        String?    @db.Text
+
+    @@map("movie")
+}
+
+model Genre {
+    id    String  @id @default(ulid())
+    name  String
+    movie Movie[]
+
+    @@map("genre")
+}
+
+model Actor {
+    id         String   @id @default(ulid())
+    movie      Movie[]
+    name       String
+    birthdate  DateTime @default(now())
+    biography  String?
+    updated_at DateTime @default(now()) @map("updatedAt")
+
+    @@map("actor")
+}
+
+model Director {
+    id         String   @id @default(ulid())
+    movie      Movie[]
+    name       String
+    birthdate  DateTime @default(now())
+    biography  String?
+    updated_at DateTime @default(now()) @map("updatedAt")
+
+    @@map("director")
+}
+
+model Order {
+    id         String   @id @default(ulid())
+    order_date DateTime @default(now()) @map("orderDate")
+    price      Int
+    status     Status
+    userId     String?
+    user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+    updated_at DateTime @default(now()) @map("updatedAt")
+
+    @@map("order")
+}
+
+enum Status {
+    CANCELLED
+    PENDING
+    COMPLETED
+}
+
+model CustomerInfo {
+    id           String    @id @default(ulid())
+    userId       String?
+    user         User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+    adress       String
+    phone_number String?   @map("phoneNumber")
+    credit_card  String    @map("creditCard")
+    birthdate    DateTime?
+    updated_at   DateTime  @default(now()) @map("updatedAt")
+
+    @@map("customer_info")
+}
+
+model User {
+    id            String         @id
+    name          String
+    email         String
+    emailVerified Boolean        @default(false)
+    image         String?
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    sessions      Session[]
+    accounts      Account[]
+    order         Order[]
+    customerInfos CustomerInfo[]
+
+    @@unique([email])
+    @@map("user")
+}
+
+model Session {
+    id        String   @id
+    expiresAt DateTime
+    token     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    ipAddress String?
+    userAgent String?
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([token])
+    @@index([userId])
+    @@map("session")
+}
+
+model Account {
+    id                    String    @id
+    accountId             String
+    providerId            String
+    userId                String
+    user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    accessToken           String?
+    refreshToken          String?
+    idToken               String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+
+    @@index([userId])
+    @@map("account")
+}
+
+model Verification {
+    id         String   @id
+    identifier String
+    value      String
+    expiresAt  DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@index([identifier])
+    @@map("verification")
 }
