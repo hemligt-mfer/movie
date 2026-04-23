@@ -1,4 +1,5 @@
 export default function Home() {
+<<<<<<< HEAD
   return (
     <div>
       <h1>Testing 1 2 3 1 2 3</h1>
@@ -43,4 +44,12 @@ export default function Home() {
       </p>
     </div>
   );
+=======
+    return (
+        <div>
+            <h1>Tesating 1 2 3 1 2 3</h1>
+            <p>Hello</p>
+        </div>
+    )
+>>>>>>> 6818fdc3790753b87fcb31d81eb1ca1e32050cf3
 }
