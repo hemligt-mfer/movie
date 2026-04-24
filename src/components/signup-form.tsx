@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 export function SignupForm({
   className,
@@ -137,7 +138,8 @@ export function SignupForm({
                   {loading ? "Creating Account..." : "Create Account"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <a href="#">Sign in</a>
+                  Already have an account?{" "}
+                  <Link href="/auth/sign-in">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -145,8 +147,9 @@ export function SignupForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our{" "}
+        <Link href="/terms">Terms of Service</Link> and{" "}
+        <Link href="/policy">Privacy Policy</Link>.
       </FieldDescription>
     </div>
   );
