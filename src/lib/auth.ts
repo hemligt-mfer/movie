@@ -5,7 +5,6 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { nextCookies } from "better-auth/next-js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { toast } from "sonner";
 
 dotenv.config();
 
