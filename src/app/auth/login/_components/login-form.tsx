@@ -42,7 +42,6 @@ export default function LoginForm() {
                 email: value.email,
                 password: value.password,
             });
-            console.log(error);
 
             if (error) {
                 if (error.code === "EMAIL_NOT_VERIFIED") {
@@ -88,6 +87,7 @@ export default function LoginForm() {
                                             onChange={(ev) => field.handleChange(ev.target.value)}
                                             aria-invalid={isInvalid}
                                             type="email"
+                                            autoComplete="email"
                                         />
                                         {isInvalid && (
                                             <FieldError errors={field.state.meta.errors} />
@@ -113,6 +113,7 @@ export default function LoginForm() {
                                             onChange={(ev) => field.handleChange(ev.target.value)}
                                             aria-invalid={isInvalid}
                                             type="password"
+                                            autoComplete="current-password"
                                         />
                                         {isInvalid && (
                                             <FieldError errors={field.state.meta.errors} />
