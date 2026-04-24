@@ -5,6 +5,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { nextCookies } from "better-auth/next-js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { toast } from "sonner";
 
 dotenv.config();
 
@@ -13,7 +14,16 @@ const prisma = new PrismaClient({
 });
 export const auth = betterAuth({
     database: prismaAdapter(prisma, { provider: "postgresql" }),
-    emailAndPassword: { enabled: true },
+    emailAndPassword: {
+        enabled: true,
+        autoSignIn: true,
+        requireEmailVerification: true,
+        resetPasswordTokenExpiresIn: 60 * 30,
+        sendResetPassword: async ({ user, url }) => {
+            console.log(`Password reset url: ${url}`);
+            // Todo: Send email to the user.
+        },
+    },
     plugins: [nextCookies()],
     emailVerification: {
         sendOnSignUp: true,
@@ -34,9 +44,9 @@ export const auth = betterAuth({
                 },
                 function (error, info) {
                     if (error) {
-                        console.error(error);
+                        toast.error("Couldn't send email." + error.message);
                     } else {
-                        console.log("Email sent: " + info.response);
+                        toast.success("Email sent: " + info.response);
                     }
                 },
             );
