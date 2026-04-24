@@ -108,7 +108,7 @@ model User {
     sessions      Session[]
     accounts      Account[]
     order         Order[]
-    customerInfos UserInfo[]
+    userInfos     UserInfo[]
 
     @@unique([email])
     @@map("user")
