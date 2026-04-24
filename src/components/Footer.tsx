@@ -8,10 +8,7 @@ export function Footer() {
         MovieShop by group A
       </div>
 
-      <div className="flex gap-4">
-        <Link href="/about">About</Link>
-        <Link href="/contact">Contact</Link>
-      </div>
+     
 
       <div>
         Lexicon Linköping 2026
